@@ -1,0 +1,20 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: Rails_Docker_Compose_PSQl
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: Rails_Docker_Compose_PSQl
+  template:
+    metadata:
+      labels:
+        app: Rails_Docker_Compose_PSQl
+    spec:
+    containers:
+      - name: Rails_Docker_Compose_PSQl
+        image: rails_docker_compose_psql-demo-web:latest
+        ports:
+        - containerPort: 3000
