@@ -14,7 +14,7 @@ services:
     ports:
       - "5432:5432"
   demo-web:
-    build: .
+    image: nitin03/rails_app:latest
     command: "./bin/rails server"
     environment:
       - RAILS_ENV=${RAILS_ENV}

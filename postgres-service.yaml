@@ -1,11 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: blog-service
+  name: postgres-service
 spec:
   selector:
-    app: blog-app
+    app: postgres
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 3000
+      port: 5432

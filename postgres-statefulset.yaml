@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: postgres
+  name: postgres-statefulset
 spec:
-  serviceName: "postgres"
+  serviceName: postgres
   replicas: 1
   selector:
     matchLabels:
@@ -17,23 +17,23 @@ spec:
         - name: postgres
           image: postgres:latest
           env:
-            - name: POSTGRES_USER
-              value: admin
-            - name: POSTGRES_PASSWORD
-              value: password
             - name: POSTGRES_DB
-              value: blog
+              value: videodb_production
+            - name: POSTGRES_USER
+              value: dean
+            - name: POSTGRES_PASSWORD
+              value: password123
           ports:
             - containerPort: 5432
           volumeMounts:
-            - name: postgres-data
+            - name: postgres-storage
               mountPath: /var/lib/postgresql/data
+
   volumeClaimTemplates:
     - metadata:
-        name: postgres-data
+        name: postgres-storage
       spec:
         accessModes: [ "ReadWriteOnce" ]
-        storageClassName: standard
         resources:
           requests:
-            storage: 1Gi
+            storage: 1Gi  # Adjust storage as needed

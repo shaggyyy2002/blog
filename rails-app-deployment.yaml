@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rails-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rails-app
+  template:
+    metadata:
+      labels:
+        app: rails-app
+    spec:
+      containers:
+        - name: rails-app
+          image: nitin03/rails_app:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          env:
+            - name: RAILS_ENV
+              value: production
+            - name: POSTGRES_HOST
+              value: db
+            - name: POSTGRES_DB
+              value: videodb_production
+            - name: POSTGRES_USER
+              value: dean
+            - name: POSTGRES_PASSWORD
+              value: password123
+            - name: RAILS_MASTER_KEY
+              value: 8af814b3e08d9e263c6635f231fc541f
+          resources:
+            limits:
+              cpu: 1 # Adjust the CPU limit as needed
+              memory: 512Mi # Adjust the memory limit as needed
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rails-app
+spec:
+  selector:
+    app: rails-app
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rails-app-ingress
+spec:
+  rules:
+    - host: localhost
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: rails-app
+                port:
+                  number: 3000
